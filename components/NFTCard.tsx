@@ -8,15 +8,16 @@ import { approve } from "thirdweb/extensions/erc721";
 type OwnedNFTsProps = {
     nft: NFT;
     refetch: () => void;
-    refecthStakedInfo: () => void;
+    refetchStakedInfo: () => void; // ✅ Fixed the typo here
 };
 
-export const NFTCard = ({ nft, refetch, refecthStakedInfo }: OwnedNFTsProps) => {
+export const NFTCard = ({ nft, refetch, refetchStakedInfo }: OwnedNFTsProps) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isApproved, setIsApproved] = useState(false);
 
     return (
         <div style={{ margin: "10px" }}>
+            {/* NFT Image Display */}
             <MediaRenderer
                 client={client}
                 src={nft.metadata.image}
@@ -27,7 +28,9 @@ export const NFTCard = ({ nft, refetch, refecthStakedInfo }: OwnedNFTsProps) => 
                     width: "200px"
                 }}
             />
-            <p style={{ margin: "0 10px 10px 10px"}}>{nft.metadata.name}</p>
+            <p style={{ margin: "0 10px 10px 10px" }}>{nft.metadata.name}</p>
+
+            {/* Stake Button */}
             <button
                 onClick={() => setIsModalOpen(true)}
                 style={{
@@ -39,7 +42,11 @@ export const NFTCard = ({ nft, refetch, refecthStakedInfo }: OwnedNFTsProps) => 
                     cursor: "pointer",
                     width: "100%"
                 }}
-            >Stake</button>
+            >
+                Stake
+            </button>
+
+            {/* Staking Modal */}
             {isModalOpen && (
                 <div style={{
                     position: "fixed",
@@ -74,9 +81,12 @@ export const NFTCard = ({ nft, refetch, refecthStakedInfo }: OwnedNFTsProps) => 
                                     color: "#fff",
                                     cursor: "pointer"
                                 }}
-                            >Close</button>
+                            >
+                                Close
+                            </button>
                         </div>
-                        <h3 style={{ margin: "10px 0" }}>You about to stake:</h3>
+
+                        <h3 style={{ margin: "10px 0" }}>You're about to stake:</h3>
                         <MediaRenderer
                             client={client}
                             src={nft.metadata.image}
@@ -85,6 +95,8 @@ export const NFTCard = ({ nft, refetch, refecthStakedInfo }: OwnedNFTsProps) => 
                                 marginBottom: "10px"
                             }}
                         />
+
+                        {/* Approval Flow */}
                         {!isApproved ? (
                             <TransactionButton
                                 transaction={() => (
@@ -94,11 +106,11 @@ export const NFTCard = ({ nft, refetch, refecthStakedInfo }: OwnedNFTsProps) => 
                                         tokenId: nft.id
                                     })
                                 )}
-                                style={{
-                                    width: "100%"
-                                }}
+                                style={{ width: "100%" }}
                                 onTransactionConfirmed={() => setIsApproved(true)}
-                            >Approve</TransactionButton>
+                            >
+                                Approve
+                            </TransactionButton>
                         ) : (
                             <TransactionButton
                                 transaction={() => (
@@ -109,20 +121,19 @@ export const NFTCard = ({ nft, refetch, refecthStakedInfo }: OwnedNFTsProps) => 
                                     })
                                 )}
                                 onTransactionConfirmed={() => {
-                                    alert("Staked!");
+                                    alert("Staked Successfully!");
                                     setIsModalOpen(false);
                                     refetch();
-                                    refecthStakedInfo();
+                                    refetchStakedInfo(); // ✅ Fixed the prop call here
                                 }}
-                                style={{
-                                    width: "100%"
-                                }}
-                            >Stake</TransactionButton>
+                                style={{ width: "100%" }}
+                            >
+                                Confirm Stake
+                            </TransactionButton>
                         )}
-                        
                     </div>
                 </div>
             )}
         </div>
-    )
+    );
 };

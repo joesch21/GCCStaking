@@ -1,7 +1,7 @@
 {
   "name": "erc721stakingtest",
   "version": "0.1.0",
-  "private": true,
+  "license": "MIT",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -9,7 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@thirdweb-dev/sdk": "^4.0.99",
     "next": "14.2.3",
+    "pino-pretty": "^13.0.0",
     "react": "^18",
     "react-dom": "^18",
     "thirdweb": "^5.12.0"

@@ -1,4 +1,5 @@
 import { defineChain } from "thirdweb";
-// import { baseSepolia } from "thirdweb/chains";
+// Import the correct chain for BSC Testnet
+import { bscTestnet } from "thirdweb/chains";
 
-export const chain = defineChain( "<chain_id>" );
+export const chain = bscTestnet;
