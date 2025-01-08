@@ -4,9 +4,15 @@ import { prepareContractCall, toEther } from "thirdweb";
 import { useEffect } from "react";
 import { balanceOf } from "thirdweb/extensions/erc721";
 
+// ✅ Address Validation Function
+const isValidEthereumAddress = (address: string | undefined): address is `0x${string}` => {
+    return typeof address === "string" && /^0x[a-fA-F0-9]{40}$/.test(address);
+};
+
 export const StakeRewards = () => {
     const account = useActiveAccount();
 
+    // ✅ Fixed: Validating the address before passing it
     const {
         data: tokenBalance,
         isLoading: isTokenBalanceLoading,
@@ -15,9 +21,9 @@ export const StakeRewards = () => {
         balanceOf,
         {
             contract: REWARD_TOKEN_CONTRACT,
-            owner: account?.address || "",
+            owner: isValidEthereumAddress(account?.address) ? account.address : "0x0000000000000000000000000000000000000000",
         }
-    )
+    );
     
     const {
         data: stakedInfo,
@@ -25,7 +31,7 @@ export const StakeRewards = () => {
     } = useReadContract({
         contract: STAKING_CONTRACT,
         method: "getStakeInfo",
-        params: [account?.address || ""],
+        params: [isValidEthereumAddress(account?.address) ? account.address : "0x0000000000000000000000000000000000000000"],
     });
 
     useEffect(() => {
@@ -38,19 +44,24 @@ export const StakeRewards = () => {
 
     return (
         <div style={{ width: "100%", margin: "20px 0", display: "flex", flexDirection: "column" }}>
-            {!isTokenBalanceLoading && (
-                <p>Wallet Balance: {toEther(BigInt(tokenBalance!.toString()))}</p>
+            {/* ✅ Fixed: Only display balance if valid */}
+            {!isTokenBalanceLoading && tokenBalance && (
+                <p>Wallet Balance: {toEther(BigInt(tokenBalance.toString()))}</p>
             )}
-            <h2 style={{ marginBottom: "20px"}}>Stake Rewards: {stakedInfo && toEther(BigInt(stakedInfo[1].toString()))}</h2>
+            
+            <h2 style={{ marginBottom: "20px"}}>
+                Stake Rewards: {stakedInfo && toEther(BigInt(stakedInfo[1].toString()))}
+            </h2>
+            
             <TransactionButton
                 transaction={() => (
                     prepareContractCall({
-                        contract:STAKING_CONTRACT,
+                        contract: STAKING_CONTRACT,
                         method: "claimRewards",
                     })
                 )}
                 onTransactionConfirmed={() => {
-                    alert("Rewards claimed!")
+                    alert("Rewards claimed!");
                     refetchStakedInfo();
                     refetchTokenBalance();
                 }}
@@ -64,7 +75,9 @@ export const StakeRewards = () => {
                     width: "100%",
                     fontSize: "12px"
                 }}
-            >Claim Rewards</TransactionButton>
+            >
+                Claim Rewards
+            </TransactionButton>
         </div>
-    )
+    );
 };

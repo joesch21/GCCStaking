@@ -8,7 +8,12 @@ import { approve } from "thirdweb/extensions/erc721";
 type OwnedNFTsProps = {
     nft: NFT;
     refetch: () => void;
-    refetchStakedInfo: () => void; // ✅ Fixed the typo here
+    refetchStakedInfo: () => void;
+};
+
+// ✅ Address Validation Function
+const isValidEthereumAddress = (address: string): address is `0x${string}` => {
+    return /^0x[a-fA-F0-9]{40}$/.test(address);
 };
 
 export const NFTCard = ({ nft, refetch, refetchStakedInfo }: OwnedNFTsProps) => {
@@ -96,16 +101,20 @@ export const NFTCard = ({ nft, refetch, refetchStakedInfo }: OwnedNFTsProps) => 
                             }}
                         />
 
-                        {/* Approval Flow */}
+                        {/* Approval Flow with Address Validation */}
                         {!isApproved ? (
                             <TransactionButton
-                                transaction={() => (
-                                    approve({
-                                        contract: NFT_CONTRACT,
-                                        to: STAKING_CONTRACT.address,
-                                        tokenId: nft.id
-                                    })
-                                )}
+                                transaction={() => {
+                                    if (isValidEthereumAddress(STAKING_CONTRACT.address)) {
+                                        return approve({
+                                            contract: NFT_CONTRACT,
+                                            to: STAKING_CONTRACT.address,
+                                            tokenId: nft.id
+                                        });
+                                    } else {
+                                        throw new Error("Invalid staking contract address.");
+                                    }
+                                }}
                                 style={{ width: "100%" }}
                                 onTransactionConfirmed={() => setIsApproved(true)}
                             >
@@ -113,18 +122,18 @@ export const NFTCard = ({ nft, refetch, refetchStakedInfo }: OwnedNFTsProps) => 
                             </TransactionButton>
                         ) : (
                             <TransactionButton
-                                transaction={() => (
+                                transaction={() =>
                                     prepareContractCall({
                                         contract: STAKING_CONTRACT,
                                         method: "stake",
                                         params: [[nft.id]]
                                     })
-                                )}
+                                }
                                 onTransactionConfirmed={() => {
                                     alert("Staked Successfully!");
                                     setIsModalOpen(false);
                                     refetch();
-                                    refetchStakedInfo(); // ✅ Fixed the prop call here
+                                    refetchStakedInfo();
                                 }}
                                 style={{ width: "100%" }}
                             >
