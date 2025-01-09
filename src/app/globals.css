@@ -1,120 +1,76 @@
-/* Base button styling */
-button {
-  padding: 12px 16px;
-  border-radius: 12px;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  width: 100%;
-  max-width: 300px;
-  margin: 10px auto;
-  display: block;
-}
-
-/* Stake Button Styling */
-button.stake {
-  background: linear-gradient(135deg, #ff416c, #ff4b2b);
-  color: white;
-  border: 2px solid #ff4b2b;
-  box-shadow: 0px 4px 15px rgba(255, 75, 43, 0.4);
-}
-
-button.stake:hover {
-  background: linear-gradient(135deg, #ff4b2b, #ff416c);
-  border: 2px solid #ff416c;
-  transform: scale(1.05);
-  box-shadow: 0px 6px 20px rgba(255, 75, 43, 0.6);
-}
-
-/* Withdraw Button Styling */
-button.withdraw {
-  background: linear-gradient(135deg, #1e90ff, #0073e6);
-  color: white;
-  border: 2px solid #0073e6;
-  box-shadow: 0px 4px 15px rgba(30, 144, 255, 0.4);
-}
-
-button.withdraw:hover {
-  background: linear-gradient(135deg, #0073e6, #1e90ff);
-  border: 2px solid #1e90ff;
-  transform: scale(1.05);
-  box-shadow: 0px 6px 20px rgba(30, 144, 255, 0.6);
-}
-
-/* Claim Rewards Button Styling */
-button.claim-rewards {
-  background: linear-gradient(135deg, #32cd32, #228b22);
-  color: white;
-  border: 2px solid #228b22;
-  box-shadow: 0px 4px 15px rgba(50, 205, 50, 0.4);
-}
-
-button.claim-rewards:hover {
-  background: linear-gradient(135deg, #228b22, #32cd32);
-  border: 2px solid #32cd32;
-  transform: scale(1.05);
-  box-shadow: 0px 6px 20px rgba(50, 205, 50, 0.6);
-}
-
 /* General Layout Improvements */
-body {
-  font-family: 'Poppins', sans-serif;
-  color: white;
-  background: #000;
-  padding: 20px;
+body, html {
   margin: 0;
-  line-height: 1.6;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+  background: #000;
+  color: white;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  overflow-x: hidden;
+}
+
+/* Main Container Centering */
+#app-container {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Centering the NFT Card */
+.nft-card {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8);
+  margin: 20px auto;
+  text-align: center;
+  max-width: 300px;
+}
+
+/* Centering the NFT Image and Making it Smaller */
+.nft-card img {
+  width: 100%;
+  max-width: 180px;
+  border-radius: 12px;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Button Styling Centered */
+button {
+  padding: 10px;
+  width: 100%;
+  max-width: 250px;
+  border-radius: 12px;
+  font-size: 1rem;
+  margin: 10px auto;
+  display: block;
+  text-align: center;
 }
 
 /* Mobile Optimization */
 @media (max-width: 768px) {
-    body {
-        padding: 10px;
-    }
+  #app-container {
+      padding: 10px;
+  }
 
-    button {
-        padding: 10px;
-        font-size: 0.9rem;
-    }
-}
+  button {
+      font-size: 0.9rem;
+  }
 
-/* Headings */
-h1, h2, h3 {
-  font-weight: bold;
-  margin-bottom: 20px;
-  text-align: center;
-}
+  .nft-card {
+      max-width: 90%;
+  }
 
-/* NFT Card Styling */
-.nft-card {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 20px;
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(10px);
-  transition: transform 0.3s ease;
-  text-align: center;
-  max-width: 300px;
-  margin: 20px auto;
-}
-
-.nft-card img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 12px;
-    object-fit: cover;
-}
-
-/* Hover Effect for NFT Card */
-.nft-card:hover {
-  transform: scale(1.05);
-  border: 2px solid rgba(255, 255, 255, 0.5);
+  .nft-card img {
+      max-width: 150px;
+  }
 }
