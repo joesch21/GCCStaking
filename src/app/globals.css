@@ -3,13 +3,11 @@ body, html {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  overflow-x: hidden;
   font-family: 'Poppins', sans-serif;
   background: #000;
   color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow-x: hidden;
+  line-height: 1.5;
 }
 
 .nft-card {
@@ -39,13 +37,22 @@ button:hover {
   opacity: 0.9;
 }
 
+/* Mobile Optimization */
 @media (max-width: 768px) {
+  body {
+      padding: 10px;
+  }
+
   .nft-card {
       max-width: 90%;
   }
 
+  .nft-card img {
+      width: 100%;
+      max-width: 120px;
+  }
+
   button {
       font-size: 0.9rem;
-      padding: 10px;
   }
 }
