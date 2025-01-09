@@ -19,38 +19,49 @@ const isValidEthereumAddress = (address: string): address is `0x${string}` => {
 export const NFTCard = ({ nft, refetch, refetchStakedInfo }: OwnedNFTsProps) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isApproved, setIsApproved] = useState(false);
-    const [showImage, setShowImage] = useState(false); // Delay image rendering for mobile optimization
+    const [isImageVisible, setIsImageVisible] = useState(false);
 
     return (
         <div style={{ 
-            margin: "10px",
+            margin: "10px auto", 
             display: "flex", 
             flexDirection: "column", 
-            alignItems: "center" 
+            alignItems: "center",
+            textAlign: "center",
+            width: "90%", // Mobile friendly width
+            maxWidth: "300px", 
         }}>
             {/* NFT Name and ID */}
-            <p style={{ fontWeight: "bold", margin: "0 10px 10px 10px" }}>
+            <p style={{ fontWeight: "bold", margin: "10px 0" }}>
                 {nft.metadata.name || `NFT ID: ${nft.id}`}
             </p>
 
-            {/* Show Image on Button Click for Faster Load */}
-            <button 
-                style={{ marginBottom: "10px", padding: "8px", cursor: "pointer" }}
-                onClick={() => setShowImage(!showImage)}
+            {/* Image Lazy Loading for Performance */}
+            <button
+                onClick={() => setIsImageVisible(!isImageVisible)}
+                style={{
+                    marginBottom: "10px",
+                    padding: "10px",
+                    borderRadius: "10px",
+                    backgroundColor: "#222",
+                    color: "#fff",
+                    border: "none",
+                    cursor: "pointer"
+                }}
             >
-                {showImage ? "Hide Image" : "Show Image"}
+                {isImageVisible ? "Hide Image" : "Show Image"}
             </button>
 
-            {showImage && (
-                <img 
+            {isImageVisible && (
+                <img
                     src={nft.metadata.image}
                     alt={nft.metadata.name}
                     style={{
                         borderRadius: "10px",
-                        marginBottom: "10px",
                         height: "150px",
                         width: "150px",
-                        objectFit: "cover"
+                        objectFit: "cover",
+                        marginBottom: "10px"
                     }}
                 />
             )}
@@ -59,14 +70,14 @@ export const NFTCard = ({ nft, refetch, refetchStakedInfo }: OwnedNFTsProps) => 
             <button
                 onClick={() => setIsModalOpen(true)}
                 style={{
-                    border: "none",
-                    backgroundColor: "#333",
-                    color: "#fff",
                     padding: "10px",
                     borderRadius: "10px",
+                    backgroundColor: "#4CAF50",
+                    color: "white",
+                    border: "none",
                     cursor: "pointer",
                     width: "100%",
-                    maxWidth: "250px", 
+                    maxWidth: "250px"
                 }}
             >
                 Stake
@@ -80,20 +91,19 @@ export const NFTCard = ({ nft, refetch, refetchStakedInfo }: OwnedNFTsProps) => 
                     left: 0,
                     width: "100%",
                     height: "100%",
-                    backgroundColor: "rgba(0, 0, 0, 0.7)",
+                    backgroundColor: "rgba(0, 0, 0, 0.8)",
                     display: "flex",
                     justifyContent: "center",
-                    alignItems: "center"
+                    alignItems: "center",
+                    zIndex: 1000
                 }}>
                     <div style={{
-                        minWidth: "80%",
+                        width: "90%",
                         maxWidth: "400px",
-                        backgroundColor: "#222",
+                        backgroundColor: "#333",
                         padding: "20px",
-                        borderRadius: "10px",
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center"
+                        borderRadius: "12px",
+                        textAlign: "center"
                     }}>
                         <button
                             onClick={() => setIsModalOpen(false)}
@@ -101,13 +111,15 @@ export const NFTCard = ({ nft, refetch, refetchStakedInfo }: OwnedNFTsProps) => 
                                 border: "none",
                                 backgroundColor: "transparent",
                                 color: "#fff",
+                                fontSize: "16px",
                                 cursor: "pointer"
                             }}
                         >
-                            Close
+                            ❌ Close
                         </button>
 
-                        <h3 style={{ margin: "10px 0" }}>Confirm Staking</h3>
+                        <h3 style={{ margin: "20px 0" }}>Confirm Staking</h3>
+
                         {/* Approval Flow */}
                         {!isApproved ? (
                             <TransactionButton
@@ -122,7 +134,7 @@ export const NFTCard = ({ nft, refetch, refetchStakedInfo }: OwnedNFTsProps) => 
                                         throw new Error("Invalid staking contract address.");
                                     }
                                 }}
-                                style={{ width: "100%", maxWidth: "250px" }}
+                                style={{ width: "100%" }}
                                 onTransactionConfirmed={() => setIsApproved(true)}
                             >
                                 Approve
@@ -142,7 +154,7 @@ export const NFTCard = ({ nft, refetch, refetchStakedInfo }: OwnedNFTsProps) => 
                                     refetch();
                                     refetchStakedInfo();
                                 }}
-                                style={{ width: "100%", maxWidth: "250px" }}
+                                style={{ width: "100%" }}
                             >
                                 Confirm Stake
                             </TransactionButton>
