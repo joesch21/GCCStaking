@@ -1,6 +1,6 @@
 /* Base button styling */
 button {
-  padding: 10px 20px;
+  padding: 12px 16px;
   border-radius: 12px;
   border: none;
   cursor: pointer;
@@ -9,6 +9,10 @@ button {
   transition: all 0.3s ease;
   text-transform: uppercase;
   letter-spacing: 1px;
+  width: 100%;
+  max-width: 300px;
+  margin: 10px auto;
+  display: block;
 }
 
 /* Stake Button Styling */
@@ -22,7 +26,7 @@ button.stake {
 button.stake:hover {
   background: linear-gradient(135deg, #ff4b2b, #ff416c);
   border: 2px solid #ff416c;
-  transform: scale(1.1);
+  transform: scale(1.05);
   box-shadow: 0px 6px 20px rgba(255, 75, 43, 0.6);
 }
 
@@ -37,7 +41,7 @@ button.withdraw {
 button.withdraw:hover {
   background: linear-gradient(135deg, #0073e6, #1e90ff);
   border: 2px solid #1e90ff;
-  transform: scale(1.1);
+  transform: scale(1.05);
   box-shadow: 0px 6px 20px rgba(30, 144, 255, 0.6);
 }
 
@@ -52,7 +56,7 @@ button.claim-rewards {
 button.claim-rewards:hover {
   background: linear-gradient(135deg, #228b22, #32cd32);
   border: 2px solid #32cd32;
-  transform: scale(1.1);
+  transform: scale(1.05);
   box-shadow: 0px 6px 20px rgba(50, 205, 50, 0.6);
 }
 
@@ -62,11 +66,31 @@ body {
   color: white;
   background: #000;
   padding: 20px;
+  margin: 0;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
+/* Mobile Optimization */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    button {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Headings */
 h1, h2, h3 {
   font-weight: bold;
   margin-bottom: 20px;
+  text-align: center;
 }
 
 /* NFT Card Styling */
@@ -77,8 +101,19 @@ h1, h2, h3 {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(10px);
   transition: transform 0.3s ease;
+  text-align: center;
+  max-width: 300px;
+  margin: 20px auto;
 }
 
+.nft-card img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+/* Hover Effect for NFT Card */
 .nft-card:hover {
   transform: scale(1.05);
   border: 2px solid rgba(255, 255, 255, 0.5);
