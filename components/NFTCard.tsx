@@ -23,9 +23,7 @@ export const NFTCard = ({ nft, refetch, refetchStakedInfo }: OwnedNFTsProps) => 
     const [isApproved, setIsApproved] = useState(false);
 
     // ✅ Validate Image and Set a Fallback
-    const imageUrl = nft?.metadata.image?.startsWith("ipfs://")
-        ? nft.metadata.image.replace("ipfs://", "https://ipfs.io/ipfs/")
-        : nft.metadata.image || "https://via.placeholder.com/150";
+    const imageUrl = nft?.metadata.image || "/public/0.png";
 
     return (
         <div style={{
@@ -44,8 +42,8 @@ export const NFTCard = ({ nft, refetch, refetchStakedInfo }: OwnedNFTsProps) => 
                 style={{
                     borderRadius: "10px",
                     marginBottom: "10px",
-                    height: "200px",
-                    width: "200px"
+                    height: "150px",
+                    width: "150px"
                 }}
             />
 

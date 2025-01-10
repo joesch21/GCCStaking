@@ -53,9 +53,6 @@ export const Staking = () => {
         contract: STAKING_CONTRACT,
         method: "getStakeInfo",
         params: [account?.address as `0x${string}`]
-
-
-
     });
 
     if (account) {
@@ -66,7 +63,8 @@ export const Staking = () => {
                 alignItems: "center",
                 backgroundColor: "#151515",
                 borderRadius: "8px",
-                width: "500px",
+                width: "100%",
+                maxWidth: "400px",
                 padding: "20px",
                 color: "white",
             }}>
@@ -87,7 +85,7 @@ export const Staking = () => {
                     width: "100%"
                 }}>
                     <h2>Owned NFTs</h2>
-                    <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", width: "500px"}}>
+                    <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", justifyContent: "center", gap: "10px" }}>
                         {ownedNFTs.length > 0 ? (
                             ownedNFTs.map((nft) => (
                                 <NFTCard
@@ -111,7 +109,7 @@ export const Staking = () => {
                 {/* Staked NFTs Section */}
                 <div style={{ width: "100%", margin: "20px 0" }}>
                     <h2>Staked NFTs</h2>
-                    <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", width: "500px"}}>
+                    <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", justifyContent: "center", gap: "10px" }}>
                         {stakedInfo && stakedInfo[0].length > 0 ? (
                             stakedInfo[0].map((nft: any, index: number) => (
                                 <StakedNFTCard

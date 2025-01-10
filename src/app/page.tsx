@@ -14,7 +14,7 @@ export default function Home() {
         margin: "20px auto",
         padding: "20px",
         width: "100%",          // Make the width responsive
-        maxWidth: "500px",      // Limit max size for larger screens
+        maxWidth: "400px",      // Limit max size for larger screens
         boxSizing: "border-box", 
         textAlign: "center",     // Center text for all screens
       }}
