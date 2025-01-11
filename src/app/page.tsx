@@ -19,7 +19,7 @@ export default function Home() {
         textAlign: "center",     // Center text for all screens
       }}
     >
-      <h1 style={{ fontSize: "2rem", marginBottom: "20px" }}>Gimp Staking</h1>
+      <h1 style={{ fontSize: "2rem", marginBottom: "20px" }}>Gimp Staking - Desktop Only - Please install MetaMask extension in browser</h1>
       
       {/* Connect Wallet Component */}
       <ConnectEmbed client={client} chain={chain} />
