@@ -5,9 +5,12 @@ import { useEffect } from "react";
 import { balanceOf } from "thirdweb/extensions/erc721";
 
 // ✅ Address Validation Function
-const isValidEthereumAddress = (address: string | undefined): address is `0x${string}` => {
+const isValidEthereumAddress = (address?: string): address is `0x${string}` => {
     return typeof address === "string" && /^0x[a-fA-F0-9]{40}$/.test(address);
 };
+
+// ✅ Safe Address Function
+const safeAddress = (address?: string) => isValidEthereumAddress(address) ? address : "0x0000000000000000000000000000000000000000";
 
 export const StakeRewards = () => {
     const account = useActiveAccount();
@@ -21,7 +24,7 @@ export const StakeRewards = () => {
         balanceOf,
         {
             contract: REWARD_TOKEN_CONTRACT,
-            owner: isValidEthereumAddress(account?.address) ? account.address : "0x0000000000000000000000000000000000000000",
+            owner: safeAddress(account?.address),
         }
     );
     
@@ -31,7 +34,7 @@ export const StakeRewards = () => {
     } = useReadContract({
         contract: STAKING_CONTRACT,
         method: "getStakeInfo",
-        params: [isValidEthereumAddress(account?.address) ? account.address : "0x0000000000000000000000000000000000000000"],
+        params: [safeAddress(account?.address)],
     });
 
     useEffect(() => {
@@ -40,7 +43,7 @@ export const StakeRewards = () => {
             refetchStakedInfo();
         }, 1000);
         return () => clearInterval(interval);
-    }, []);
+    }, [refetchStakedInfo]);
 
     return (
         <div style={{ width: "100%", margin: "20px 0", display: "flex", flexDirection: "column" }}>
@@ -50,7 +53,7 @@ export const StakeRewards = () => {
             )}
             
             <h2 style={{ marginBottom: "20px"}}>
-                Stake Rewards: {stakedInfo && toEther(BigInt(stakedInfo[1].toString()))}
+                Stake Rewards: {stakedInfo && toEther(BigInt(stakedInfo[1]?.toString() || "0"))}
             </h2>
             
             <TransactionButton

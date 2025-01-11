@@ -16,12 +16,11 @@ export const Staking = () => {
 
     const [ownedNFTs, setOwnedNFTs] = useState<NFT[]>([]);
 
+    // Fetch Owned NFTs
     const getOwnedNFTs = async () => {
         let ownedNFTs: NFT[] = [];
 
-        const totalNFTSupply = await totalSupply({
-            contract: NFT_CONTRACT,
-        });
+        const totalNFTSupply = await totalSupply({ contract: NFT_CONTRACT });
         const nfts = await getNFTs({
             contract: NFT_CONTRACT,
             start: 0,
@@ -68,11 +67,8 @@ export const Staking = () => {
                 padding: "20px",
                 color: "white",
             }}>
-                <ConnectButton
-                    client={client}
-                    chain={chain}
-                />
-                
+                <ConnectButton client={client} chain={chain} />
+
                 <hr style={{
                     width: "100%",
                     border: "1px solid #333",
@@ -80,21 +76,17 @@ export const Staking = () => {
                 }}/>
 
                 {/* Owned NFTs Section */}
-                <div style={{ 
-                    margin: "20px 0",
-                    width: "100%"
-                }}>
+                <div style={{ margin: "20px 0", width: "100%" }}>
                     <h2>Owned NFTs</h2>
                     <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", justifyContent: "center", gap: "10px" }}>
                         {ownedNFTs.length > 0 ? (
                             ownedNFTs.map((nft) => (
                                 <NFTCard
-    key={nft.id}
-    nft={nft}
-    refetch={async () => await getOwnedNFTs()}  // Ensure it returns a Promise
-    refetchStakedInfo={async () => await refetchStakedInfo()}  // Same here
-/>
-
+                                    key={nft.id}
+                                    nft={nft}
+                                    refetch={getOwnedNFTs}
+                                    refetchStakedInfo={refetchStakedInfo}
+                                />
                             ))
                         ) : (
                             <p>You own 0 NFTs</p>
@@ -111,13 +103,16 @@ export const Staking = () => {
                 <div style={{ width: "100%", margin: "20px 0" }}>
                     <h2>Staked NFTs</h2>
                     <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", justifyContent: "center", gap: "10px" }}>
-                        {stakedInfo && stakedInfo[0].length > 0 ? (
+                        {stakedInfo && stakedInfo[0]?.length > 0 ? (
                             stakedInfo[0].map((nft: any, index: number) => (
                                 <StakedNFTCard
                                     key={index}
                                     tokenId={nft}
-                                    refetchStakedInfo={refetchStakedInfo}
-                                    refetchOwnedNFTs={getOwnedNFTs}
+                                    refetchStakedInfo={async () => {
+                                        await refetchStakedInfo();
+                                    }}
+                                    
+                                    refetchOwnedNFTs={() => { getOwnedNFTs().then(() => {}); }}
                                 />
                             ))
                         ) : (
