@@ -21,6 +21,13 @@ body, html {
   margin-bottom: 20px;
 }
 
+.nft-card img {
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
 button {
   width: 100%;
   padding: 12px;
@@ -31,10 +38,18 @@ button {
   transition: all 0.2s ease;
   max-width: 250px;
   margin: 10px auto;
+  background: linear-gradient(135deg, #ff416c, #ff4b2b);
+  color: white;
 }
 
 button:hover {
   opacity: 0.9;
+  transform: scale(1.02);
+}
+
+button:disabled {
+  background: grey;
+  cursor: not-allowed;
 }
 
 /* Mobile Optimization */
@@ -44,15 +59,28 @@ button:hover {
   }
 
   .nft-card {
-      max-width: 90%;
+      max-width: 100%;
+      padding: 8px;
   }
 
   .nft-card img {
-      width: 100%;
-      max-width: 120px;
+      max-width: 100px;
+      height: auto;
   }
 
   button {
       font-size: 0.9rem;
+      padding: 10px;
+  }
+}
+
+/* Tablet Optimization */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .nft-card {
+      max-width: 320px;
+  }
+
+  button {
+      padding: 12px;
   }
 }

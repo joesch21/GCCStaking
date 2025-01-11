@@ -7,12 +7,13 @@ import { NFT_CONTRACT, STAKING_CONTRACT } from "../utils/contracts";
 import { useState } from "react";
 import { approve } from "thirdweb/extensions/erc721";
 
-// ✅ Props for the component
+// ✅ Props for the component (No function props anymore)
 type OwnedNFTsProps = {
     nft: NFT;
-    refetch: () => void;
-    refetchStakedInfo: () => void;
+    refetch: () => Promise<void>;  // Return type updated for compatibility
+    refetchStakedInfo: (options?: any) => Promise<void>;  // Also updated
 };
+
 
 // ✅ Ethereum Address Validator
 const isValidEthereumAddress = (address: string): address is `0x${string}` => {
@@ -20,7 +21,7 @@ const isValidEthereumAddress = (address: string): address is `0x${string}` => {
 };
 
 // ✅ NFTCard Component for Staking NFTs
-export const NFTCard = ({ nft, refetch, refetchStakedInfo }: OwnedNFTsProps) => {
+export const NFTCard = ({ nft }: OwnedNFTsProps) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isApproved, setIsApproved] = useState(false);
 
@@ -28,6 +29,11 @@ export const NFTCard = ({ nft, refetch, refetchStakedInfo }: OwnedNFTsProps) => 
     const imageUrl = nft?.metadata.image?.startsWith("ipfs://")
         ? nft.metadata.image.replace("ipfs://", "https://ipfs.io/ipfs/")
         : nft.metadata.image || "/0.png";
+
+    // ✅ Local Refetch Logic
+    const handleRefetch = async () => {
+        window.location.reload(); // Simplified to force reload instead of passing down a function
+    };
 
     return (
         <div style={{
@@ -133,8 +139,7 @@ export const NFTCard = ({ nft, refetch, refetchStakedInfo }: OwnedNFTsProps) => 
                                 onTransactionConfirmed={() => {
                                     alert("Staked Successfully!");
                                     setIsModalOpen(false);
-                                    refetch();
-                                    refetchStakedInfo();
+                                    handleRefetch();  // Refresh the page
                                 }}
                                 style={{ width: "100%" }}
                             >Confirm Stake</TransactionButton>

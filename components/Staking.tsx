@@ -89,11 +89,12 @@ export const Staking = () => {
                         {ownedNFTs.length > 0 ? (
                             ownedNFTs.map((nft) => (
                                 <NFTCard
-                                    key={nft.id}
-                                    nft={nft}
-                                    refetch={getOwnedNFTs}
-                                    refetchStakedInfo={refetchStakedInfo}
-                                />
+    key={nft.id}
+    nft={nft}
+    refetch={async () => await getOwnedNFTs()}  // Ensure it returns a Promise
+    refetchStakedInfo={async () => await refetchStakedInfo()}  // Same here
+/>
+
                             ))
                         ) : (
                             <p>You own 0 NFTs</p>
