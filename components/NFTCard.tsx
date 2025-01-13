@@ -14,10 +14,6 @@ type OwnedNFTsProps = {
     refetchStakedInfo: (options?: any) => Promise<void>;  // Also updated
 };
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 972e23b1af516c3b3949c2b30d71d20d42bbe776
 // ✅ NFTCard Component Updated
 export const NFTCard = ({ nft, refetch, refetchStakedInfo }: OwnedNFTsProps) => {
     const [isModalOpen, setIsModalOpen] = useState(false);

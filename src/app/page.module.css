@@ -8,15 +8,8 @@
   min-height: 100vh;
   text-align: center;
   box-sizing: border-box;
-<<<<<<< HEAD
-  background: #121212;
-  color: white;
-  font-family: 'Poppins', sans-serif;
-  overflow-x: hidden; /* ✅ Prevents horizontal scroll */
-=======
   max-width: 1200px;
   margin: 0 auto;
->>>>>>> 972e23b1af516c3b3949c2b30d71d20d42bbe776
 }
 
 /* Scaling for Smaller Screens */
@@ -57,18 +50,10 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 16px;
-<<<<<<< HEAD
-  max-width: 100%; /* ✅ Adjusted for full responsiveness */
-  padding: 1rem;
-  box-sizing: border-box;
-  justify-content: center;
-  align-items: center;
-=======
   padding: 1rem;
   box-sizing: border-box;
   justify-content: center;
   max-width: 100%;
->>>>>>> 972e23b1af516c3b3949c2b30d71d20d42bbe776
 }
 
 /* NFT Card Styling with Consistent Hover Effects */
@@ -121,11 +106,7 @@ button {
   color: white;
   box-shadow: 0 4px 12px rgba(255, 75, 43, 0.5);
   width: 100%;
-<<<<<<< HEAD
-  max-width: 280px;
-=======
   max-width: 300px;
->>>>>>> 972e23b1af516c3b3949c2b30d71d20d42bbe776
   transition: all 0.3s ease;
 }
 
@@ -160,12 +141,7 @@ button:disabled {
 
   .card {
       padding: 1rem;
-<<<<<<< HEAD
-      font-size: 0.9rem;
-      max-width: 280px; /* ✅ Consistent with the image */
-=======
       max-width: 90%;
->>>>>>> 972e23b1af516c3b3949c2b30d71d20d42bbe776
   }
 
   button {

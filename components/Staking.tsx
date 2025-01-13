@@ -85,7 +85,10 @@ export const Staking = () => {
     key={nft.id}
     nft={nft}
     refetch={async () => await getOwnedNFTs()} // ✅ Async function
-    refetchStakedInfo={async () => await refetchStakedInfo()} // ✅ Async function
+    refetchStakedInfo={async () => {
+        await refetchStakedInfo();  // Ignoring the returned data
+    }}
+    
 />
 
 
