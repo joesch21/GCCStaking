@@ -1,58 +1,177 @@
-/* General Mobile Optimization */
-body, html {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  overflow-x: hidden;
-  font-family: 'Poppins', sans-serif;
-  background: #000;
-  color: white;
-  line-height: 1.5;
-}
-
-.nft-card {
-  max-width: 320px;
-  width: 100%;
-  padding: 10px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.1);
+/* Global Styling for Layout Consistency */
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem;
+  min-height: 100vh;
   text-align: center;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8);
-  margin-bottom: 20px;
+  box-sizing: border-box;
+  background: #121212;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  overflow-x: hidden; /* ✅ Prevents horizontal scroll */
 }
 
-button {
-  width: 100%;
-  padding: 12px;
-  border-radius: 12px;
+/* Scaling for Smaller Screens */
+.description {
   font-size: 1rem;
-  border: none;
+  padding: 1rem;
+  max-width: 90%;
+  width: 100%;
+  text-align: center;
+  line-height: 1.6;
+  color: #e0e0e0;
+}
+
+.description a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  color: #ff4b2b;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.description a:hover {
+  color: #ff416c;
+}
+
+.description p {
+  padding: 1rem;
+  background-color: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* NFT Grid Optimization for Mobile */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  max-width: 100%; /* ✅ Adjusted for full responsiveness */
+  padding: 1rem;
+  box-sizing: border-box;
+  justify-content: center;
+  align-items: center;
+}
+
+/* NFT Card Styling with Consistent Hover Effects */
+.card {
+  padding: 1rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease-in-out, box-shadow 0.3s ease;
+  text-align: center;
   cursor: pointer;
-  transition: all 0.2s ease;
-  max-width: 250px;
-  margin: 10px auto;
+  max-width: 320px; /* ✅ Prevents oversized cards on mobile */
+}
+
+.card img {
+  width: 100%;
+  max-width: 280px; /* ✅ Adjusted for better mobile rendering */
+  height: auto;
+  border-radius: 12px;
+  object-fit: cover;
+  margin-bottom: 10px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card img.lazy-load {
+  filter: blur(5px);
+  transition: filter 0.3s ease;
+}
+
+.card img.loaded {
+  filter: blur(0);
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 4px 12px rgba(255, 255, 255, 0.2);
+}
+
+/* Button Styling for Consistency and Accessibility */
+button {
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  background: linear-gradient(135deg, #ff416c, #ff4b2b);
+  color: white;
+  box-shadow: 0 4px 12px rgba(255, 75, 43, 0.5);
+  width: 100%;
+  max-width: 280px;
+  transition: all 0.3s ease;
 }
 
 button:hover {
-  opacity: 0.9;
+  transform: scale(1.05);
+  background: linear-gradient(135deg, #ff4b2b, #ff416c);
 }
 
-/* Mobile Optimization */
-@media (max-width: 768px) {
-  body {
-      padding: 10px;
+button:disabled {
+  background: grey;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Consistent Center Content Styling */
+.center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ✅ Mobile Optimization (up to 700px) */
+@media (max-width: 700px) {
+  .main {
+      padding: 2rem;
   }
 
-  .nft-card {
-      max-width: 90%;
+  .grid {
+      grid-template-columns: 1fr;
   }
 
-  .nft-card img {
-      width: 100%;
-      max-width: 120px;
+  .card {
+      padding: 1rem;
+      font-size: 0.9rem;
+      max-width: 280px; /* ✅ Consistent with the image */
   }
 
   button {
       font-size: 0.9rem;
+      padding: 10px;
+  }
+}
+
+/* ✅ Tablet Optimization (701px - 1120px) */
+@media (min-width: 701px) and (max-width: 1120px) {
+  .grid {
+      grid-template-columns: repeat(2, 1fr);
+  }
+
+  .card {
+      padding: 1.2rem;
+  }
+}
+
+/* ✅ Desktop Optimization (Above 1120px) */
+@media (min-width: 1121px) {
+  .grid {
+      grid-template-columns: repeat(3, 1fr);
+  }
+
+  .card {
+      padding: 1.5rem;
   }
 }

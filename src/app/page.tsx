@@ -3,6 +3,8 @@ import { client } from "./client";
 import { chain } from "./chain";
 import { Staking } from "../../components/Staking";
 import { isMobile } from "react-device-detect";
+import styles from "./page.module.css";
+
 
 export default function Home() {
   return (
@@ -15,21 +17,30 @@ export default function Home() {
         margin: "20px auto",
         padding: "20px",
         width: "100%",
-        maxWidth: "400px",
+        maxWidth: isMobile ? "100%" : "400px", // ✅ Adjusted for mobile
         boxSizing: "border-box", 
         textAlign: "center",
       }}
     >
-      {/* Dynamic Message for Desktop and Mobile */}
-      <h1 style={{ fontSize: "2rem", marginBottom: "20px" }}>
-        Gimp Staking - {isMobile ? "Use MetaMask Mobile App" : "Desktop Only - Please install MetaMask extension"}
+      {/* ✅ Adjusted Header for Mobile and Desktop */}
+      <h1 style={{ 
+        fontSize: isMobile ? "1.5rem" : "2rem", 
+        marginBottom: "20px" 
+      }}>
+        Gimp NFT Membership Rewards - {isMobile ? "Use MetaMask Mobile App" : "Desktop Only ATM - Please install MetaMask extension"}
       </h1>
       
-      {/* Connect Wallet Component */}
+      {/* ✅ Updated Connect Wallet Section */}
       <ConnectEmbed client={client} chain={chain} />
 
-      {/* NFT Staking Section */}
-      <Staking />
+      {/* ✅ Conditionally Hide Staking on Mobile Without Metamask */}
+      {isMobile ? (
+        <p style={{ color: "orange" }}>
+          Please use the MetaMask mobile browser for staking.
+        </p>
+      ) : (
+        <Staking />
+      )}
     </div>
   );
 }
