@@ -14,8 +14,22 @@
   overflow-x: hidden; /* ✅ Prevents horizontal scroll */
 }
 
+<<<<<<< HEAD
 /* Scaling for Smaller Screens */
 .description {
+=======
+.nft-card img {
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+>>>>>>> 972e23b1af516c3b3949c2b30d71d20d42bbe776
   font-size: 1rem;
   padding: 1rem;
   max-width: 90%;
@@ -69,6 +83,7 @@
   transition: transform 0.2s ease-in-out, box-shadow 0.3s ease;
   text-align: center;
   cursor: pointer;
+<<<<<<< HEAD
   max-width: 320px; /* ✅ Prevents oversized cards on mobile */
 }
 
@@ -116,6 +131,23 @@ button {
 button:hover {
   transform: scale(1.05);
   background: linear-gradient(135deg, #ff4b2b, #ff416c);
+=======
+  transition: all 0.2s ease;
+  max-width: 250px;
+  margin: 10px auto;
+  background: linear-gradient(135deg, #ff416c, #ff4b2b);
+  color: white;
+}
+
+button:hover {
+  opacity: 0.9;
+  transform: scale(1.02);
+}
+
+button:disabled {
+  background: grey;
+  cursor: not-allowed;
+>>>>>>> 972e23b1af516c3b3949c2b30d71d20d42bbe776
 }
 
 button:disabled {
@@ -138,6 +170,7 @@ button:disabled {
       padding: 2rem;
   }
 
+<<<<<<< HEAD
   .grid {
       grid-template-columns: 1fr;
   }
@@ -146,6 +179,16 @@ button:disabled {
       padding: 1rem;
       font-size: 0.9rem;
       max-width: 280px; /* ✅ Consistent with the image */
+=======
+  .nft-card {
+      max-width: 100%;
+      padding: 8px;
+  }
+
+  .nft-card img {
+      max-width: 100px;
+      height: auto;
+>>>>>>> 972e23b1af516c3b3949c2b30d71d20d42bbe776
   }
 
   button {
@@ -154,6 +197,7 @@ button:disabled {
   }
 }
 
+<<<<<<< HEAD
 /* ✅ Tablet Optimization (701px - 1120px) */
 @media (min-width: 701px) and (max-width: 1120px) {
   .grid {
@@ -173,5 +217,15 @@ button:disabled {
 
   .card {
       padding: 1.5rem;
+=======
+/* Tablet Optimization */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .nft-card {
+      max-width: 320px;
+  }
+
+  button {
+      padding: 12px;
+>>>>>>> 972e23b1af516c3b3949c2b30d71d20d42bbe776
   }
 }

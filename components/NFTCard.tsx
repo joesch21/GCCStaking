@@ -10,10 +10,14 @@ import { approve } from "thirdweb/extensions/erc721";
 // ✅ Updated Prop Types: No more async props directly
 type OwnedNFTsProps = {
     nft: NFT;
-    refetch: () => void;
-    refetchStakedInfo: () => void;
+    refetch: () => Promise<void>;  // Return type updated for compatibility
+    refetchStakedInfo: (options?: any) => Promise<void>;  // Also updated
 };
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 972e23b1af516c3b3949c2b30d71d20d42bbe776
 // ✅ NFTCard Component Updated
 export const NFTCard = ({ nft, refetch, refetchStakedInfo }: OwnedNFTsProps) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -27,6 +31,11 @@ export const NFTCard = ({ nft, refetch, refetchStakedInfo }: OwnedNFTsProps) => 
     const imageUrl = nft?.metadata.image?.startsWith("ipfs://")
         ? nft.metadata.image.replace("ipfs://", "https://ipfs.io/ipfs/")
         : nft.metadata.image || "/0.png";
+
+    // ✅ Local Refetch Logic
+    const handleRefetch = async () => {
+        window.location.reload(); // Simplified to force reload instead of passing down a function
+    };
 
     return (
         <div>
