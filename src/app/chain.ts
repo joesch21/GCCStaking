@@ -1,5 +1,18 @@
 import { defineChain } from "thirdweb";
-// Import the correct chain for BSC Testnet
-import { bsc } from "thirdweb/chains";
 
-export const chain = bsc;
+export const chain = defineChain({
+  id: 56, // ✅ Binance Smart Chain Mainnet
+  name: "BNB Chain",
+  rpcUrls: {
+    default: { http: ["https://bsc-mainnet.public.blastapi.io"] }, // ✅ Stable public RPC
+  },
+  nativeCurrency: {
+    name: "BNB",
+    symbol: "BNB",
+    decimals: 18,
+  },
+  blockExplorers: {
+    default: { name: "BscScan", url: "https://bscscan.com" },
+  },
+  testnet: false,
+});
