@@ -14,19 +14,28 @@ import { StakedNFTCard } from "./StakedNFTCard";
 export const Staking = () => {
     const account = useActiveAccount();
     const [ownedNFTs, setOwnedNFTs] = useState<NFT[]>([]);
+    const [cachedNFTs, setCachedNFTs] = useState<{ [key: string]: NFT }>({});
 
-    // ✅ Fetch Owned NFTs with Metadata
     const getOwnedNFTs = async () => {
         if (!account) return;
-        
+
         let ownedNFTs: NFT[] = [];
         const totalNFTSupply = await totalSupply({ contract: NFT_CONTRACT });
 
         for (let i = 0; i < parseInt(totalNFTSupply.toString()); i++) {
-            const owner = await ownerOf({ contract: NFT_CONTRACT, tokenId: BigInt(i) });
+            const tokenId = BigInt(i);
+
+            if (cachedNFTs[tokenId.toString()]) {
+                ownedNFTs.push(cachedNFTs[tokenId.toString()]);
+                continue;
+            }
+
+            const owner = await ownerOf({ contract: NFT_CONTRACT, tokenId });
+
             if (owner === account?.address) {
-                const nft = await getNFT({ contract: NFT_CONTRACT, tokenId: BigInt(i) }); // ✅ Fetch full metadata
+                const nft = await getNFT({ contract: NFT_CONTRACT, tokenId });
                 ownedNFTs.push(nft);
+                setCachedNFTs(prev => ({ ...prev, [tokenId.toString()]: nft }));
             }
         }
 
@@ -73,15 +82,15 @@ export const Staking = () => {
             {/* Owned NFTs Section */}
             <div style={{ margin: "20px 0", width: "100%" }}>
                 <h2>Owned NFTs</h2>
-                <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", justifyContent: "center", gap: "10px" }}>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "10px" }}>
                     {ownedNFTs.length > 0 ? (
                         ownedNFTs.map((nft) => (
                             <NFTCard
                                 key={nft.id}
                                 nft={nft}
                                 onStaked={() => {
-                                    getOwnedNFTs();  // ✅ Refresh owned NFTs
-                                    refetchStakedInfo();  // ✅ Refresh staking info
+                                    getOwnedNFTs();
+                                    refetchStakedInfo();
                                 }}
                             />
                         ))
@@ -96,15 +105,15 @@ export const Staking = () => {
             {/* Staked NFTs Section */}
             <div style={{ width: "100%", margin: "20px 0" }}>
                 <h2>Staked NFTs</h2>
-                <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", justifyContent: "center", gap: "10px" }}>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "10px" }}>
                     {stakedInfo && stakedInfo[0]?.length > 0 ? (
                         stakedInfo[0].map((nft: any, index: number) => (
                             <StakedNFTCard
                                 key={index}
                                 tokenId={nft}
                                 onUnstaked={() => {
-                                    getOwnedNFTs();  // ✅ Refresh owned NFTs after unstaking
-                                    refetchStakedInfo();  // ✅ Refresh staking info
+                                    getOwnedNFTs();
+                                    refetchStakedInfo();
                                 }}
                             />
                         ))

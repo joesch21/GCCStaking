@@ -27,7 +27,7 @@ export default function Home() {
         fontSize: isMobile ? "1.5rem" : "2rem", 
         marginBottom: "20px" 
       }}>
-        Gimp NFT Membership Rewards - {isMobile ? "Use MetaMask Mobile App" : "Desktop Only ATM - Please install MetaMask extension"}
+        Gimp NFT Membership Rewards {isMobile ? "" : ""}
       </h1>
       
       {/* ✅ Updated Connect Wallet Section */}
@@ -36,7 +36,7 @@ export default function Home() {
       {/* ✅ Conditionally Hide Staking on Mobile Without Metamask */}
       {isMobile ? (
         <p style={{ color: "orange" }}>
-          Please use the MetaMask mobile browser for staking.
+          
         </p>
       ) : (
         <Staking />
