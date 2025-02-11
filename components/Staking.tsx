@@ -6,41 +6,66 @@ import { ConnectButton, useActiveAccount, useReadContract } from "thirdweb/react
 import { StakeRewards } from "./StakeRewards";
 import { NFT_CONTRACT, STAKING_CONTRACT } from "../utils/contracts";
 import { NFT } from "thirdweb";
-import { useEffect, useState } from "react";
-import { getNFT, ownerOf, totalSupply } from "thirdweb/extensions/erc721";
+import { useEffect, useState, useCallback } from "react";
+import { getNFT, balanceOf } from "thirdweb/extensions/erc721";
 import { NFTCard } from "./NFTCard";
 import { StakedNFTCard } from "./StakedNFTCard";
 
 export const Staking = () => {
     const account = useActiveAccount();
     const [ownedNFTs, setOwnedNFTs] = useState<NFT[]>([]);
-    const [cachedNFTs, setCachedNFTs] = useState<{ [key: string]: NFT }>({});
 
     const getOwnedNFTs = async () => {
         if (!account) return;
-
-        let ownedNFTs: NFT[] = [];
-        const totalNFTSupply = await totalSupply({ contract: NFT_CONTRACT });
-
-        for (let i = 0; i < parseInt(totalNFTSupply.toString()); i++) {
-            const tokenId = BigInt(i);
-
-            if (cachedNFTs[tokenId.toString()]) {
-                ownedNFTs.push(cachedNFTs[tokenId.toString()]);
-                continue;
+        try {
+            const balance = await balanceOf({ contract: NFT_CONTRACT, owner: account.address });
+    
+            if (!balance || Number(balance) === 0) {
+                setOwnedNFTs([]);
+                return;
             }
-
-            const owner = await ownerOf({ contract: NFT_CONTRACT, tokenId });
-
-            if (owner === account?.address) {
-                const nft = await getNFT({ contract: NFT_CONTRACT, tokenId });
-                ownedNFTs.push(nft);
-                setCachedNFTs(prev => ({ ...prev, [tokenId.toString()]: nft }));
-            }
+    
+            const tokenIds = Array.from({ length: Number(balance) }, (_, i) => BigInt(i));
+    
+            const nfts = await Promise.all(
+                tokenIds.map(async (tokenId) => {
+                    try {
+                        const nft = await getNFT({ contract: NFT_CONTRACT, tokenId });
+                        if (!nft) return null; // Ensure NFT exists
+    
+                        return {
+                            id: tokenId,
+                            owner: account.address as `0x${string}`,
+                            tokenURI: nft.tokenURI || "", // ✅ Ensures tokenURI is a string
+                            type: "ERC721", // ✅ Default to ERC721
+                            supply: BigInt(1), // ✅ Required field for ERC1155 compatibility
+                            metadata: nft.metadata ?? { 
+                                id: tokenId, 
+                                uri: "", 
+                                name: `NFT ${tokenId.toString()}`, 
+                                description: "", 
+                                image: undefined, 
+                                animation_url: undefined, 
+                                external_url: undefined, 
+                                background_color: undefined, 
+                                properties: {}, 
+                                attributes: {} 
+                            }
+                        } as NFT; // ✅ Explicitly cast as NFT
+                    } catch (error) {
+                        console.error(`Error fetching NFT ${tokenId}:`, error);
+                        return null;
+                    }
+                })
+            );
+    
+            setOwnedNFTs(nfts.filter((nft): nft is NFT => nft !== null)); // ✅ Type-safe filtering
+        } catch (error) {
+            console.error("Error fetching owned NFTs:", error);
         }
-
-        setOwnedNFTs(ownedNFTs);
     };
+    
+    
 
     useEffect(() => {
         if (account) {
@@ -54,67 +79,42 @@ export const Staking = () => {
         params: [account?.address as `0x${string}`]
     });
 
-    if (!account) {
-        return (
-            <div style={{ color: "white", textAlign: "center" }}>
-                <p>Please connect your wallet to stake your NFTs.</p>
-                <ConnectButton client={client} chain={chain} />
-            </div>
-        );
-    }
+    const handleStake = useCallback((nft: NFT) => {
+        setOwnedNFTs(prev => prev.filter(n => n.id !== nft.id));
+        refetchStakedInfo();
+    }, []);
 
     return (
-        <div style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            backgroundColor: "#151515",
-            borderRadius: "8px",
-            width: "100%",
-            maxWidth: "400px",
-            padding: "20px",
-            color: "white",
-        }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", backgroundColor: "#151515", borderRadius: "8px", width: "100%", maxWidth: "400px", padding: "20px", color: "white" }}>
             <ConnectButton client={client} chain={chain} />
-
             <hr style={{ width: "100%", border: "1px solid #333", margin: "20px 0" }}/>
-
-            {/* Owned NFTs Section */}
             <div style={{ margin: "20px 0", width: "100%" }}>
                 <h2>Owned NFTs</h2>
+                <p style={{ color: "#ffcc00", fontSize: "14px" }}>Approve each NFT before staking. Once approved, the button will change color and allow staking.</p>
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "10px" }}>
                     {ownedNFTs.length > 0 ? (
                         ownedNFTs.map((nft) => (
-                            <NFTCard
-                                key={nft.id}
-                                nft={nft}
-                                onStaked={() => {
-                                    getOwnedNFTs();
-                                    refetchStakedInfo();
-                                }}
-                            />
+                            <NFTCard key={nft.id.toString()} nft={nft} onStaked={() => handleStake(nft)} />
                         ))
                     ) : (
                         <p>You own 0 NFTs</p>
                     )}
                 </div>
             </div>
-
             <hr style={{ width: "100%", border: "1px solid #333" }}/>
-
-            {/* Staked NFTs Section */}
             <div style={{ width: "100%", margin: "20px 0" }}>
                 <h2>Staked NFTs</h2>
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "10px" }}>
                     {stakedInfo && stakedInfo[0]?.length > 0 ? (
-                        stakedInfo[0].map((nft: any, index: number) => (
-                            <StakedNFTCard
-                                key={index}
-                                tokenId={nft}
+                        stakedInfo[0].map((tokenId: bigint, index: number) => (
+                            <StakedNFTCard 
+                                key={index} 
+                                tokenId={tokenId} 
+                                metadata={{ name: `NFT ${tokenId.toString()}` }}
                                 onUnstaked={() => {
-                                    getOwnedNFTs();
+                                    setOwnedNFTs(prev => [...prev, { id: tokenId, metadata: { name: `NFT ${tokenId}` } } as NFT]);
                                     refetchStakedInfo();
-                                }}
+                                }} 
                             />
                         ))
                     ) : (
@@ -122,10 +122,7 @@ export const Staking = () => {
                     )}
                 </div>
             </div>
-
             <hr style={{ width: "100%", border: "1px solid #333" }}/>
-
-            {/* Stake Rewards Section */}
             <StakeRewards />
         </div>
     );
