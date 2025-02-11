@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { TransactionButton } from "thirdweb/react";
 import { NFT, prepareContractCall } from "thirdweb";
 import { NFT_CONTRACT, STAKING_CONTRACT } from "../utils/contracts";
@@ -29,6 +30,15 @@ export const NFTCard: React.FC<NFTCardProps> = ({ nft, onStaked }) => {
             borderRadius: "10px",
             marginBottom: "10px"
         }}>
+            {/* ✅ Load image from local compressed folder */}
+            <Image 
+                src={`/compressed/thumb_${nft.id.toString()}.jpg`}
+                alt={nft.metadata?.name || "NFT Image"}
+                width={100}
+                height={100}
+                priority
+            />
+
             <p><strong>NFT ID:</strong> {nft.id.toString()}</p>
             <p><strong>Name:</strong> {nft.metadata?.name || "Unknown NFT"}</p>
 
